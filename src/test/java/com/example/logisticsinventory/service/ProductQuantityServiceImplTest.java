@@ -1,6 +1,6 @@
 package com.example.logisticsinventory.service;
 
-import com.example.logisticsinventory.data.model.Inventory;
+import com.example.logisticsinventory.data.model.ProductQuantity;
 import com.example.logisticsinventory.data.model.Product;
 import com.example.logisticsinventory.data.repository.ProductRepository;
 import com.example.logisticsinventory.service.dto.InventoryDto;
@@ -16,10 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j
-class InventoryServiceImplTest {
+class ProductQuantityServiceImplTest {
 
     @Autowired
-    InventoryService inventoryService;
+    ProductQuantityService productQuantityService;
 
     @Autowired
     ProductRepository productRepository;
@@ -31,18 +31,37 @@ class InventoryServiceImplTest {
     @Test
     void createInventoryItem() {
         //create an Inventory item, inventory Item requires creating a product and setting its attributes.
+        //Create a Product
         Product firstProduct = new Product();
         firstProduct.setName("Java");
         firstProduct.setPrice(500.0);
+        //save the product in the database
        productRepository.save(firstProduct);
+       //Create an Inventory
        InventoryDto inventoryDto = new InventoryDto();
        inventoryDto.setQuantity(500L);
        inventoryDto.setProduct(firstProduct);
-       inventoryService.createInventoryItem(inventoryDto);
+       //Save.
+       productQuantityService.createInventoryItem(inventoryDto);
+       assertThat(inventoryDto.getQuantity()).isNotNull();
+       assertThat(inventoryDto.getProduct()).isNotNull();
     }
 
     @Test
     void editInventoryItem() {
+        //Create a Product
+        Product firstProduct = new Product();
+        firstProduct.setName("Java");
+        firstProduct.setPrice(500.0);
+        //save the product in the database
+        productRepository.save(firstProduct);
+        //Create an Inventory
+        InventoryDto inventoryDto = new InventoryDto();
+        inventoryDto.setQuantity(500L);
+        inventoryDto.setProduct(firstProduct);
+        //Save.
+        productQuantityService.createInventoryItem(inventoryDto);
+        //Edit Item
 
     }
 
@@ -73,11 +92,11 @@ class InventoryServiceImplTest {
         InventoryDto inventoryDto3 = new InventoryDto();
         inventoryDto3.setQuantity(600L);
         inventoryDto3.setProduct(secondProduct);
-        inventoryService.createInventoryItem(inventoryDto);
-        inventoryService.createInventoryItem(inventoryDto2);
-        inventoryService.createInventoryItem(inventoryDto3);
+        productQuantityService.createInventoryItem(inventoryDto);
+        productQuantityService.createInventoryItem(inventoryDto2);
+        productQuantityService.createInventoryItem(inventoryDto3);
         //Delete one inventory Item.
-        inventoryService.deleteInventoryItem(firstProduct);
+        productQuantityService.deleteInventoryItem(firstProduct);
     }
 
     @Test
@@ -92,8 +111,8 @@ class InventoryServiceImplTest {
         InventoryDto inventoryDto = new InventoryDto();
         inventoryDto.setQuantity(500L);
         inventoryDto.setProduct(firstProduct);
-        inventoryService.createInventoryItem(inventoryDto);
-        List<Inventory> inventories = inventoryService.getAllInventory();
+        productQuantityService.createInventoryItem(inventoryDto);
+        List<ProductQuantity> inventories = productQuantityService.getAllInventoryItems();
     assertThat(inventories.size()).isEqualTo(1);
     }
 }
