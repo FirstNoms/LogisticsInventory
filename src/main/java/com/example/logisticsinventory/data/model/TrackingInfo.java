@@ -5,8 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,5 +17,12 @@ import javax.persistence.Id;
 
 public class TrackingInfo {
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime timeOfEntry;
+    private int quantityAddedOrRemoved;
+
+    @OneToMany
+    private List<Product> product;
+
 }
