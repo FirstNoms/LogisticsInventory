@@ -7,5 +7,5 @@ import lombok.Data;
 public class ProductDto {
     private String name;
     private Category category;
-    private Long price;
+    private Double price;
 }

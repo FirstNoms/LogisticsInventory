@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-     ProductRepository productRepository;
+     private final ProductRepository productRepository;
 
     @Override
     public Product createProduct(ProductDto productDto) {
@@ -26,14 +26,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product editProduct(Long id, ProductDto productDto) {
-        Optional<Product> firstProduct  = productRepository.findById(id);
-        firstProduct.ifPresent(product -> {
-            product.setPrice(productDto.getPrice());
-            product.setName(productDto.getName());
-            product.setCategory(productDto.getCategory());
-            productRepository.save(product);
-        });
-        return firstProduct.get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("anything"));
+            if(productDto.getPrice() != null) product.setPrice(productDto.getPrice());
+            if(productDto.getName()  !=null) product.setName(productDto.getName());
+            if(product.getCategory()!=null) productDto.setCategory(productDto.getCategory());
+            return productRepository.save(product);
 
     }
 
